@@ -212,3 +212,22 @@ pytest tests/ -v
 Distributed under the MIT License. See `LICENSE` for more information.
 
 Built with dedication as a modern software engineering portfolio project.
+
+
+
+## Screenshots
+
+### Overview
+![TaskFlow Overview](screenshots/Overview.png)
+
+### Inbox
+![TaskFlow Inbox](screenshots/Inbox.png)
+
+### Upcoming
+![TaskFlow Upcoming](screenshots/Upcoming.png)
+
+### Workspace
+![TaskFlow Workspace](screenshots/Workspace.png)
+
+### Settings
+![TaskFlow Settings](screenshots/Settings.png)
