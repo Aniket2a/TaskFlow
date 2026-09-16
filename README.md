@@ -51,7 +51,8 @@ The current AI Studio frontend uses Firebase directly for its active task/projec
 Security was engineered as a core foundation rather than an afterthought:
 
 1. **Zero Hardcoded Secrets & Configuration Separation**: The client browser uses standard, public Firebase Web SDK configuration (supplied via `VITE_FIREBASE_*` environment variables) to connect to Firebase Authentication and Firestore, while sensitive Firebase Admin credentials, service accounts, and private keys (`FIREBASE_PRIVATE_KEY`) remain strictly server-side environment variables. No private credentials or secrets exist in the git history or codebase.
-2. **Stateless Bearer Token Verification**: The frontend acquires a cryptographic Firebase ID token upon login and attaches it in the HTTP `Authorization: Bearer <token>` header. The FastAPI backend verifies the token's cryptographic signature, expiration time, and audience against Firebase Auth servers on every non-public request.
+2. **Authentication & API Security**: The active browser client uses Firebase Authentication and the Firebase Web SDK for user-scoped Firestore access. The separate FastAPI service accepts Firebase ID tokens and verifies them server-side when the API is used.
+
 3. **Guaranteed Data Isolation**: No client query can read or write documents outside its authenticated path. Every database query strictly resolves to `users/{current_user.uid}/<collection>/<doc_id>`. User A cannot view, mutate, or delete records belonging to User B, even if they guess or supply User B's entity IDs.
 4. **Input Sanitization & Schema Validation**: Strict Pydantic v2 models on the backend and Zod schemas on the frontend validate payloads at the boundaries, rejecting oversized fields, malformed formats, and unexpected properties.
 
@@ -102,37 +103,6 @@ Security was engineered as a core foundation rather than an afterthought:
 | Icons | Lucide React |
 
 
-
-## ✨ Key Features
-
-**Full Task Lifecycle**: Create, edit, complete, and delete tasks with subtasks, progress tracking, and status management.- **Organization by Projects & Tags**: Categorize workloads into color-coded workspaces (e.g., *CS Capstone*, *Distributed Systems*, *Algorithms*) with multi-tag filtering.
-- **Dynamic Productivity Analytics**: Live computation of total tasks, completion rates, remaining tasks, and streak tracking computed directly from active task state.
-- **Multi-Factor Filtering & Search**: Instant client-side search across task titles and descriptions, priority filtering (*High*, *Medium*, *Low*), tag filtering, and view sorting (*Today*, *Upcoming*, *Completed*, *Inbox*).
-- **Keyboard-First Navigation**: Global command palette accessible with `Ctrl + K` or `Cmd + K` for rapid task creation, filtering, and navigation.
-**Optimistic UI with Rollback**: Instant interface feedback with asynchronous Firestore persistence and rollback when a write fails.- **On-Demand Demo Seeding**: Isolated, idempotent sample coursework generator available in Settings to populate realistic student workflows without contaminating clean user profiles.
-**Dark, Light & System Appearance**: Theme support with system preference detection and responsive theme switching.
----
-
-## 🛠️ Tech Stack & Justifications
-
-### Frontend
-- **React 19 & TypeScript**: Provides end-to-end type safety, modern functional components, and predictable state transitions.
-- **Vite**: Rapid Hot-Module Replacement during development and optimized tree-shaken static production builds.
-- **Tailwind CSS**: Utility-first styling enabling high design craftsmanship without runtime CSS overhead.
-- **Zustand**: Lightweight, boilerplate-free state management with zero provider nesting, allowing seamless optimistic updates and API synchronization.
-- **React Hook Form & Zod**: High-performance, un-controlled form inputs with declarative schema-driven validation and clear error messages.
-- **Lucide Icons & Motion**: Refined iconography and hardware-accelerated animations for fluid interactions.
-
-### Backend
-- **Python 3.11+ & FastAPI**: Asynchronous ASGI framework offering automatic OpenAPI documentation, high concurrency, and native async/await performance.
-- **Pydantic v2**: Lightning-fast C-extension based data validation ensuring strict input sanitization.
-- **Firebase Admin SDK**: Secure server-side Firebase ID token verification and Google Cloud Firestore database interaction.
-- **Uvicorn**: Lightning-fast ASGI production-ready web server.
-
-### Testing
-- **Vitest & React Testing Library**: Blazing fast ESM-native test runner for frontend unit, store, schema, and component tests.
-- **Pytest & FastAPI TestClient**: Comprehensive backend test suite covering authentication, validation, error handling, and multi-tenant isolation with full mocks.
-
 ---
 
 ## 🚀 Local Development Setup
@@ -145,7 +115,7 @@ Security was engineered as a core foundation rather than an afterthought:
 ### 1. Frontend Setup
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/taskflow.git
+git clone https://github.com/Aniket2a/TaskFlow.git
 cd taskflow
 
 # Install dependencies
@@ -212,7 +182,7 @@ TaskFlow includes thorough test suites across both tiers of the stack.
 # Run all frontend tests (unit, store, validation schemas, UI components)
 npm test
 ```
-*Current test suite: 19 passing tests verifying Zod validation, store CRUD mutations, project unlinking, and UI empty states.*
+*Current frontend test suite: 50 passing tests across 5 test suites.*
 
 ### Backend Tests (Pytest)
 ```bash
