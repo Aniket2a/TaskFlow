@@ -1,0 +1,39 @@
+# Dependencies & build outputs
+node_modules/
+dist/
+build/
+coverage/
+.DS_Store
+*.log
+
+# Environment variables & local configuration
+.env
+.env.local
+.env.*.local
+.env.*
+!.env.example
+!**/.env.example
+
+# Security: Exclude Firebase service-account keys, credentials, and certificates
+*service-account*.json
+*service_account*.json
+*firebase-adminsdk*.json
+*credentials*.json
+*.pem
+*.key
+backend/service-account.json
+
+# Python virtual environments & bytecode cache
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+env/
+ENV/
+.coverage
+htmlcov/
+
+

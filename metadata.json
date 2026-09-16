@@ -1,0 +1,6 @@
+{
+  "name": "TaskFlow",
+  "description": "Plan smarter. Focus better. Get things done. A modern SaaS productivity application for students, developers, and young professionals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

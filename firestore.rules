@@ -1,0 +1,110 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidTask(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.userId is string && data.userId.size() <= 128 &&
+             data.title is string && data.title.size() > 0 && data.title.size() <= 255 &&
+             data.status in ['todo', 'in_progress', 'completed'] &&
+             data.priority in ['low', 'medium', 'high'] &&
+             (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+             (!('projectId' in data) || (data.projectId is string && data.projectId.size() <= 128)) &&
+             (!('dueDate' in data) || (data.dueDate is string && data.dueDate.size() <= 64)) &&
+             (!('dueTime' in data) || (data.dueTime is string && data.dueTime.size() <= 32)) &&
+             (!('recurrence' in data) || (data.recurrence in ['none', 'daily', 'weekly', 'monthly'])) &&
+             (!('tags' in data) || (data.tags is list && data.tags.size() <= 20)) &&
+             (!('subtasks' in data) || (data.subtasks is list && data.subtasks.size() <= 50));
+    }
+
+    function isValidProject(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.userId is string && data.userId.size() <= 128 &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 128 &&
+             data.color is string && data.color.size() <= 32 &&
+             (!('description' in data) || (data.description is string && data.description.size() <= 1000));
+    }
+
+    // Tasks Collection
+    match /tasks/{taskId} {
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && isValidId(taskId) && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(taskId) &&
+                       incoming().userId == request.auth.uid &&
+                       isValidTask(incoming());
+      allow update: if isSignedIn() && isValidId(taskId) &&
+                       existing().userId == request.auth.uid &&
+                       incoming().userId == existing().userId &&
+                       isValidTask(incoming());
+      allow delete: if isSignedIn() && isValidId(taskId) &&
+                       existing().userId == request.auth.uid;
+    }
+
+    // Projects Collection
+    match /projects/{projectId} {
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && isValidId(projectId) && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(projectId) &&
+                       incoming().userId == request.auth.uid &&
+                       isValidProject(incoming());
+      allow update: if isSignedIn() && isValidId(projectId) &&
+                       existing().userId == request.auth.uid &&
+                       incoming().userId == existing().userId &&
+                       isValidProject(incoming());
+      allow delete: if isSignedIn() && isValidId(projectId) &&
+                       existing().userId == request.auth.uid;
+    }
+
+    // Users Collection and user-scoped subcollections
+    match /users/{userId} {
+      allow get: if isSignedIn() && (request.auth.uid == userId || isValidId(userId));
+      allow create, update: if isOwner(userId);
+
+      // User-scoped tasks subcollection
+      match /tasks/{taskId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // User-scoped projects subcollection
+      match /projects/{projectId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // User-scoped tags subcollection
+      match /tags/{tagId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Connection Healthcheck
+    match /test/connection {
+      allow read: if true;
+    }
+  }
+}

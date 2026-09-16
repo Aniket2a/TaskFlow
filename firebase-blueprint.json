@@ -1,0 +1,178 @@
+{
+  "entities": {
+    "Task": {
+      "title": "Task",
+      "description": "A student productivity task or assignment item",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Unique task identifier"
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the owner"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Task headline or assignment title"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Detailed notes or requirements"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["todo", "in_progress", "completed"],
+          "description": "Current lifecycle status"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Urgency priority tier"
+        },
+        "projectId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Associated project workspace ID"
+        },
+        "dueDate": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "ISO date string or Today indicator"
+        },
+        "dueTime": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Optional scheduled time"
+        },
+        "recurrence": {
+          "type": "string",
+          "enum": ["none", "daily", "weekly", "monthly"],
+          "description": "Recurring schedule frequency"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["id", "userId", "title", "status", "priority"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A workspace grouping related tasks and courses",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Unique workspace identifier"
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the workspace owner"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Project title or course name"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "Project goals and syllabus details"
+        },
+        "color": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Hex color code for theme"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Last modification timestamp"
+        }
+      },
+      "required": ["id", "userId", "name", "color"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile metadata",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Display name"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Contact email"
+        },
+        "avatar": {
+          "type": "string",
+          "maxLength": 1024,
+          "description": "Profile picture URL"
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Occupation or student role"
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Last profile update"
+        }
+      },
+      "required": ["id", "name"]
+    }
+  },
+  "firestore": {
+    "/tasks/{taskId}": {
+      "schema": {
+        "$ref": "#/entities/Task"
+      },
+      "description": "User tasks stored per document"
+    },
+    "/projects/{projectId}": {
+      "schema": {
+        "$ref": "#/entities/Project"
+      },
+      "description": "User workspace projects"
+    },
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Public user profile information"
+    }
+  }
+}
