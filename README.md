@@ -105,15 +105,12 @@ Security was engineered as a core foundation rather than an afterthought:
 
 ## ✨ Key Features
 
-- **Full Task Lifecycle**: Create, edit, complete, delete, and restore tasks with granular subtasks, progress meters, and status tracking.
-- **Organization by Projects & Tags**: Categorize workloads into color-coded workspaces (e.g., *CS Capstone*, *Distributed Systems*, *Algorithms*) with multi-tag filtering.
+**Full Task Lifecycle**: Create, edit, complete, and delete tasks with subtasks, progress tracking, and status management.- **Organization by Projects & Tags**: Categorize workloads into color-coded workspaces (e.g., *CS Capstone*, *Distributed Systems*, *Algorithms*) with multi-tag filtering.
 - **Dynamic Productivity Analytics**: Live computation of total tasks, completion rates, remaining tasks, and streak tracking computed directly from active task state.
 - **Multi-Factor Filtering & Search**: Instant client-side search across task titles and descriptions, priority filtering (*High*, *Medium*, *Low*), tag filtering, and view sorting (*Today*, *Upcoming*, *Completed*, *Inbox*).
 - **Keyboard-First Navigation**: Global command palette accessible with `Ctrl + K` or `Cmd + K` for rapid task creation, filtering, and navigation.
-- **Optimistic UI with Rollback**: Instant user interface feedback on all CRUD operations backed by asynchronous server synchronization.
-- **On-Demand Demo Seeding**: Isolated, idempotent sample coursework generator available in Settings to populate realistic student workflows without contaminating clean user profiles.
-- **Dark, Light & System Appearance**: Theme engine with system preference detection and accessible contrast ratios.
-
+**Optimistic UI with Rollback**: Instant interface feedback with asynchronous Firestore persistence and rollback when a write fails.- **On-Demand Demo Seeding**: Isolated, idempotent sample coursework generator available in Settings to populate realistic student workflows without contaminating clean user profiles.
+**Dark, Light & System Appearance**: Theme support with system preference detection and responsive theme switching.
 ---
 
 ## 🛠️ Tech Stack & Justifications
