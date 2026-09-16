@@ -2,10 +2,9 @@
 
 > **Plan smarter. Focus better. Get things done.**
 
-TaskFlow is a production-grade full-stack productivity and task management platform engineered for students, developers, and young professionals. Designed with the visual precision and tactile responsiveness of tools like Linear and Notion, TaskFlow pairs an accessible user experience with software engineering design principles: **clean separation of concerns, zero hardcoded credentials, cryptographically verified authentication, user-scoped multi-tenant data isolation, optimistic UI updates, and comprehensive test coverage**.
+TaskFlow is a modern productivity and task management application designed to help users organize tasks, manage projects, track progress, and stay focused.
 
 ---
-
 ## 🏛️ System Architecture
 
 TaskFlow uses a modern decoupled architecture:
@@ -57,6 +56,52 @@ Security was engineered as a core foundation rather than an afterthought:
 4. **Input Sanitization & Schema Validation**: Strict Pydantic v2 models on the backend and Zod schemas on the frontend validate payloads at the boundaries, rejecting oversized fields, malformed formats, and unexpected properties.
 
 ---
+
+
+## ✨ Features
+
+### Task Management
+- Create, edit, complete, and delete tasks
+- Set priorities and due dates
+- Add descriptions and subtasks
+- Track completed and remaining work
+
+### Workspace Management
+- Create and manage project workspaces
+- View workspace progress and completion percentage
+- View workspace details and task statistics
+- Edit or delete workspaces
+
+### Productivity
+- Overview dashboard
+- Inbox, Today, Upcoming, and Completed views
+- Search and multi-filter tasks
+- Completion statistics and daily streaks
+- Progress tracking for each workspace
+
+### User Experience
+- Firebase Authentication
+- Cloud Firestore persistence
+- Light, Dark, and System appearance modes
+- Responsive mobile-friendly interface
+- Loading, empty, and error states
+- Export workspace data as JSON
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|---|---|
+| Frontend | React 19, TypeScript, Vite |
+| Styling | Tailwind CSS |
+| State Management | Zustand |
+| Authentication | Firebase Authentication |
+| Database | Cloud Firestore |
+| Backend API | Python, FastAPI |
+| Validation | Zod |
+| Testing | Vitest |
+| Icons | Lucide React |
+
+
 
 ## ✨ Key Features
 
