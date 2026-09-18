@@ -143,7 +143,7 @@ export const api = {
       userId?: string
     ): Promise<Task> => {
       const currentUser = auth.currentUser;
-      const uid = currentUser?.uid || taskData.userId || userId;
+      const uid = currentUser?.uid;
       if (!uid) {
         throw new ApiError('User must be authenticated to create a task', 401);
       }
@@ -199,7 +199,7 @@ export const api = {
 
     update: async (id: string, updates: Partial<Task>, userId?: string): Promise<Task> => {
       const currentUser = auth.currentUser;
-      const uid = currentUser?.uid || userId;
+      const uid = currentUser?.uid;
       if (!uid) {
         throw new ApiError('User must be authenticated to update a task', 401);
       }
@@ -285,7 +285,7 @@ export const api = {
 
     delete: async (id: string, userId?: string): Promise<void> => {
       const currentUser = auth.currentUser;
-      const uid = currentUser?.uid || userId;
+      const uid = currentUser?.uid;
       if (!uid) {
         throw new ApiError('User must be authenticated to delete a task', 401);
       }
@@ -305,7 +305,7 @@ export const api = {
       userId?: string
     ): Promise<Project> => {
       const currentUser = auth.currentUser;
-      const uid = currentUser?.uid || userId;
+      const uid = currentUser?.uid;
       if (!uid) {
         throw new ApiError('User must be authenticated to create a project', 401);
       }
@@ -318,7 +318,7 @@ export const api = {
 
     update: async (id: string, updates: Partial<Project>, userId?: string): Promise<Project> => {
       const currentUser = auth.currentUser;
-      const uid = currentUser?.uid || userId;
+      const uid = currentUser?.uid;
       if (!uid) {
         throw new ApiError('User must be authenticated to update a project', 401);
       }
@@ -340,7 +340,7 @@ export const api = {
 
     delete: async (id: string, userId?: string): Promise<void> => {
       const currentUser = auth.currentUser;
-      const uid = currentUser?.uid || userId;
+      const uid = currentUser?.uid;
       if (!uid) {
         throw new ApiError('User must be authenticated to delete a project', 401);
       }
@@ -357,7 +357,7 @@ export const api = {
 
     create: async (tag: Omit<Tag, 'id'> & { id?: string }, userId?: string): Promise<Tag> => {
       const currentUser = auth.currentUser;
-      const uid = currentUser?.uid || userId;
+      const uid = currentUser?.uid;
       if (!uid) {
         throw new ApiError('User must be authenticated to create a tag', 401);
       }
@@ -370,7 +370,7 @@ export const api = {
 
     delete: async (id: string, userId?: string): Promise<void> => {
       const currentUser = auth.currentUser;
-      const uid = currentUser?.uid || userId;
+      const uid = currentUser?.uid;
       if (!uid) {
         throw new ApiError('User must be authenticated to delete a tag', 401);
       }
