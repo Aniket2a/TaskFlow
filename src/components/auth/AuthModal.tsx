@@ -112,13 +112,11 @@ export const AuthModal: React.FC = () => {
       setAuthModalOpen(false);
     } catch (err: any) {
       console.error('Guest mode warning:', err);
-      setUser({
-        id: `guest_${Date.now()}`,
-        name: 'Guest Scholar',
-        email: 'guest@taskflow.local',
-        role: 'Guest Mode',
-      });
-      setAuthModalOpen(false);
+      // Do not create a fake client-side identity when Firebase anonymous
+      // authentication fails. That state is not backed by Firebase Auth and
+      // must not be treated as an authenticated session.
+      setAuthError('Guest mode is temporarily unavailable. Please try again or sign in.');
+
     } finally {
       setIsSocialLoading(false);
     }
