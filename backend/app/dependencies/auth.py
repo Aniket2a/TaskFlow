@@ -12,7 +12,7 @@ from backend.app.schemas.auth import AuthenticatedUser
 
 async def get_current_user(authorization: Optional[str] = Header(None)) -> AuthenticatedUser:
     """Dependency that extracts and cryptographically verifies Firebase ID token from Authorization header.
-    
+
     Raises:
         HTTPException 401: If header is missing, malformed, or token is invalid/expired.
         HTTPException 503: If Firebase Admin SDK is not configured on the server.
@@ -36,17 +36,17 @@ async def get_current_user(authorization: Optional[str] = Header(None)) -> Authe
 
     try:
         decoded_token = verify_firebase_id_token(token)
-    except RuntimeError as rerr:
+    except RuntimeError:
         # Server configuration issue
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Authentication service is currently unconfigured or unavailable.",
         )
-    except Exception as exc:
-        # Invalid / expired token
+    except Exception:
+        # Invalid / expired token. Keep provider-specific verification details server-side.
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid or expired Firebase ID token: {str(exc)}",
+            detail="Invalid or expired authentication token.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
