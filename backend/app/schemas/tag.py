@@ -5,9 +5,9 @@ from pydantic import BaseModel, Field
 
 
 class TagCreate(BaseModel):
-    id: Optional[str] = Field(default=None, max_length=128)
-    name: str = Field(..., min_length=1, max_length=50, description="Tag label")
-    color: Optional[str] = Field(default="#6366f1", max_length=32, description="Badge color")
+    id: Optional[str] = Field(default=None, max_length=128, pattern=r"^[a-zA-Z0-9_-]+$")
+    name: str = Field(..., min_length=1, max_length=50)
+    color: Optional[str] = Field(default="#6366f1", max_length=32)
 
 
 class TagResponse(BaseModel):
