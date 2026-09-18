@@ -220,8 +220,8 @@ export function subscribeToAuth(callback: (user: UserProfile | null) => void) {
 /**
  * Helper to ensure operations use the authenticated Firebase UID.
  */
-function getAuthenticatedUid(explicitUserId?: string): string {
-  const uid = auth.currentUser?.uid || explicitUserId;
+function getAuthenticatedUid(): string {
+  const uid = auth.currentUser?.uid;
   if (!uid) {
     throw new Error('User must be authenticated to perform Firestore operations.');
   }
@@ -285,7 +285,7 @@ export function subscribeToUserTasks(
   onError?: (err: Error) => void
 ) {
   try {
-    const uid = getAuthenticatedUid(userId);
+    const uid = getAuthenticatedUid();
     const tasksRef = collection(db, 'users', uid, 'tasks');
 
     return onSnapshot(
@@ -310,7 +310,7 @@ export function subscribeToUserTasks(
 }
 
 export async function getUserTasks(userId?: string): Promise<Task[]> {
-  const uid = getAuthenticatedUid(userId);
+  const uid = getAuthenticatedUid();
   const path = `users/${uid}/tasks`;
   try {
     const tasksRef = collection(db, 'users', uid, 'tasks');
@@ -333,7 +333,7 @@ export function cleanTaskForFirestore(
   task: Partial<Task> & { id: string },
   fallbackUid: string
 ): Record<string, any> {
-  const uid = getAuthenticatedUid(task.userId || fallbackUid);
+  const uid = getAuthenticatedUid();
   const now = new Date().toISOString();
 
   // Subtasks: preserve boolean completed, sanitize string title, empty array if none
@@ -393,7 +393,7 @@ export function cleanTaskForFirestore(
 }
 
 export async function saveTaskToFirestore(task: Task, userId?: string): Promise<void> {
-  const uid = getAuthenticatedUid(userId || task.userId);
+  const uid = getAuthenticatedUid();
   const cleanDoc = cleanTaskForFirestore(task, uid);
   const path = `users/${uid}/tasks/${task.id}`;
   try {
@@ -405,7 +405,7 @@ export async function saveTaskToFirestore(task: Task, userId?: string): Promise<
 }
 
 export async function deleteTaskFromFirestore(taskId: string, userId?: string): Promise<void> {
-  const uid = getAuthenticatedUid(userId);
+  const uid = getAuthenticatedUid();
   const path = `users/${uid}/tasks/${taskId}`;
   try {
     const docRef = doc(db, 'users', uid, 'tasks', taskId);
@@ -425,7 +425,7 @@ export function subscribeToUserProjects(
   onError?: (err: Error) => void
 ) {
   try {
-    const uid = getAuthenticatedUid(userId);
+    const uid = getAuthenticatedUid();
     const projectsRef = collection(db, 'users', uid, 'projects');
 
     return onSnapshot(
@@ -450,7 +450,7 @@ export function subscribeToUserProjects(
 }
 
 export async function getUserProjects(userId?: string): Promise<Project[]> {
-  const uid = getAuthenticatedUid(userId);
+  const uid = getAuthenticatedUid();
   const path = `users/${uid}/projects`;
   try {
     const projectsRef = collection(db, 'users', uid, 'projects');
@@ -493,7 +493,7 @@ export function cleanProjectForFirestore(project: Project, userId?: string): Rec
 }
 
 export async function saveProjectToFirestore(project: Project, userId?: string): Promise<void> {
-  const uid = getAuthenticatedUid(userId);
+  const uid = getAuthenticatedUid();
   const cleanDoc = cleanProjectForFirestore(project, uid);
   const path = `users/${uid}/projects/${project.id}`;
   try {
@@ -505,7 +505,7 @@ export async function saveProjectToFirestore(project: Project, userId?: string):
 }
 
 export async function deleteProjectFromFirestore(projectId: string, userId?: string): Promise<void> {
-  const uid = getAuthenticatedUid(userId);
+  const uid = getAuthenticatedUid();
   const path = `users/${uid}/projects/${projectId}`;
   try {
     const docRef = doc(db, 'users', uid, 'projects', projectId);
@@ -525,7 +525,7 @@ export function subscribeToUserTags(
   onError?: (err: Error) => void
 ) {
   try {
-    const uid = getAuthenticatedUid(userId);
+    const uid = getAuthenticatedUid();
     const tagsRef = collection(db, 'users', uid, 'tags');
 
     return onSnapshot(
@@ -550,7 +550,7 @@ export function subscribeToUserTags(
 }
 
 export async function getUserTags(userId?: string): Promise<Tag[]> {
-  const uid = getAuthenticatedUid(userId);
+  const uid = getAuthenticatedUid();
   const path = `users/${uid}/tags`;
   try {
     const tagsRef = collection(db, 'users', uid, 'tags');
@@ -566,7 +566,7 @@ export async function getUserTags(userId?: string): Promise<Tag[]> {
 }
 
 export async function saveTagToFirestore(tag: Tag, userId?: string): Promise<void> {
-  const uid = getAuthenticatedUid(userId);
+  const uid = getAuthenticatedUid();
   const cleanDoc: Record<string, any> = {
     id: tag.id,
     userId: uid,
@@ -584,7 +584,7 @@ export async function saveTagToFirestore(tag: Tag, userId?: string): Promise<voi
 }
 
 export async function deleteTagFromFirestore(tagId: string, userId?: string): Promise<void> {
-  const uid = getAuthenticatedUid(userId);
+  const uid = getAuthenticatedUid();
   const path = `users/${uid}/tags/${tagId}`;
   try {
     const docRef = doc(db, 'users', uid, 'tags', tagId);

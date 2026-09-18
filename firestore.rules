@@ -83,7 +83,10 @@ service cloud.firestore {
 
     // Users Collection and user-scoped subcollections
     match /users/{userId} {
-      allow get: if isSignedIn() && (request.auth.uid == userId || isValidId(userId));
+      // A user may read only their own profile document.
+      // The previous rule allowed any signed-in user who supplied a syntactically
+      // valid UID to read another user's profile.
+      allow get: if isOwner(userId);
       allow create, update: if isOwner(userId);
 
       // User-scoped tasks subcollection

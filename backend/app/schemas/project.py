@@ -12,14 +12,14 @@ class ProjectBase(BaseModel):
 
 
 class ProjectCreate(ProjectBase):
-    id: Optional[str] = Field(default=None, max_length=128)
+    id: Optional[str] = Field(default=None, max_length=128, pattern=r"^[a-zA-Z0-9_-]+$")
 
 
 class ProjectUpdate(BaseModel):
     name: Optional[str] = Field(default=None, min_length=1, max_length=128)
     description: Optional[str] = Field(default=None, max_length=1000)
     color: Optional[str] = Field(default=None, max_length=32)
-    icon: Optional[str] = None
+    icon: Optional[str] = Field(default=None, max_length=64)
 
 
 class ProjectResponse(ProjectBase):
