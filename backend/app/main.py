@@ -35,8 +35,8 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Modern productivity REST API for students and developers. Integrates with Firebase Admin & Firestore.",
     version=settings.VERSION,
-    docs_url="/docs",
-    redoc_url="/redoc",
+    docs_url="/docs" if settings.ENVIRONMENT != "production" else None,
+    redoc_url="/redoc" if settings.ENVIRONMENT != "production" else None,
     lifespan=lifespan,
 )
 
@@ -78,7 +78,6 @@ async def health_check():
         "service": "taskflow-api",
         "version": settings.VERSION,
         "environment": settings.ENVIRONMENT,
-        "firebase_configured": settings.is_firebase_configured(),
     }
 
 
